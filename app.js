@@ -1,11 +1,11 @@
 const dbModule = require('./src/module/db.module')
-const exp = require('express')
-const app = exp()
+const express = require('express')
+const app = express()
 const PORT = 3000
 const HOST = 'localhost'
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, OPTIONS, PUT, PATCH, DELETE'
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(exp.json())
+app.use(express.json())
 
 app.post('/user/new', async (req, res) => {
   try {
@@ -23,7 +23,7 @@ app.post('/user/new', async (req, res) => {
     let { username, password, birth, gender } = req.body
 
     if (users[username]) {
-      return res.json({ ERROR: "bu user ro'yxatda bor!" })
+      return res.status(400).json({ ERROR: "bu user ro'yxatda bor!" })
     }
 
     users[username] = {
@@ -35,27 +35,32 @@ app.post('/user/new', async (req, res) => {
     }
 
     await dbModule.write_user_to_db(users)
-    return res.json({ message: 'user qushildi!' })
+    return res.status(201).json({ message: 'user qushildi!' })
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
+
 app.post('/user/check', async (req, res) => {
   try {
     let users = await dbModule.get_user_in_db()
     let { username, password } = req.body
 
     if (!users[username]) {
-      return res.json({ ERROR: 'user topilmadi!' })
+      return res.status(404).json({ ERROR: 'user topilmadi!' })
     }
     if (users[username]['password'] != password) {
-      return res.json({ ERROR: 'password xato!' })
+      return res.status(400).json({ ERROR: 'password xato!' })
     }
     users[username]['online'] = true
     await dbModule.write_user_to_db(users)
-    return res.json({ message: 'ok ' + username })
+    return res.status(200).json({ message: 'ok ' + username })
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
 
@@ -73,7 +78,9 @@ app.get('/users', async (req, res) => {
     }
     return res.json(users)
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
 
@@ -81,11 +88,16 @@ app.put('/user/exit', async (req, res) => {
   try {
     let users = await dbModule.get_user_in_db()
     let { username } = req.query
+    if (!users[username]) {
+      return res.status(404).json({ ERROR: 'user topilmadi!' })
+    }
     users[username]['online'] = false
     await dbModule.write_user_to_db(users)
     return res.json({ message: 'user offline' })
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
 
@@ -93,9 +105,14 @@ app.get('/todo', async (req, res) => {
   try {
     let users = await dbModule.get_user_in_db()
     let { username } = req.query
+    if (!users[username]) {
+      return res.status(404).json({ ERROR: 'user topilmadi!' })
+    }
     res.json(users[username]['todo_list'])
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
 
@@ -109,7 +126,9 @@ app.put('/todo', async (req, res) => {
     await dbModule.write_user_to_db(users)
     return res.json({ message: 'haloti uzgartirildi!' })
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
 
@@ -120,7 +139,7 @@ app.post('/todo/new', async (req, res) => {
 
     for (const t of users[username]['todo_list']) {
       if (t['title'] == title) {
-        return res.json({ ERROR: 'bu todo mavjud!' })
+        return res.status(400).json({ ERROR: 'bu todo mavjud!' })
       }
     }
 
@@ -134,7 +153,9 @@ app.post('/todo/new', async (req, res) => {
     await dbModule.write_user_to_db(users)
     return res.json({ message: "todo qo'shildi!" })
   } catch (xato) {
-    console.log(xato)
+    return res
+      .status(406)
+      .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
 app.listen(3000, () =>

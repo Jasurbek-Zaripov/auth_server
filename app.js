@@ -121,7 +121,7 @@ app.get('/todo', async (req, res) => {
 app.put('/todo', async (req, res) => {
   try {
     let users = await dbModule.get_user_in_db()
-    let { username, todoID, holat } = req.query
+    let { username, todoID, holat } = req.body
     if (!username || !todoID || !holat) {
       return res.json({ ERROR: "malumotni to'ldiring!" })
     }

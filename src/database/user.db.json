@@ -1,1 +1,35 @@
-{}
+{
+  "Jasurbek": {
+    "user_id": "95952021690112893923293916728957932050220297241479419",
+    "password": "1aA!",
+    "gender": "male",
+    "birth": "2021-12-31",
+    "online": true,
+    "todo_list": {
+      "1": {
+        "title": "birinchi title",
+        "todo": "birinchi text",
+        "holat": "yashil",
+        "time": "22:18:28"
+      },
+      "2": {
+        "title": "ikkinchi title",
+        "todo": "ikkinchi text",
+        "holat": "yashil",
+        "time": "22:19:05"
+      },
+      "3": {
+        "title": "yangi",
+        "todo": "qwerty",
+        "holat": "yashil",
+        "time": "22:30:03"
+      },
+      "4": {
+        "title": "yangi title",
+        "todo": "qwert",
+        "holat": "sariq",
+        "time": "22:31:18"
+      }
+    }
+  }
+}

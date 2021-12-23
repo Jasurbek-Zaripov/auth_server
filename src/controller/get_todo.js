@@ -3,7 +3,7 @@ const dbModule = require('../module/db.module')
 async function get_todo(req, res) {
   try {
     let users = await dbModule.get_user_in_db()
-    let { username, user_id } = req.body
+    let { username, user_id } = req.query
 
     //validate ---------------------------------------------
     if (!users[username]) {

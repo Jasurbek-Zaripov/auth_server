@@ -4,7 +4,6 @@ async function new_todo(req, res) {
   try {
     let { username, title, todo, user_id } = req.body
     let users = await dbModule.get_user_in_db()
-
     //validate---------------------------------
     if (!username || !title || !todo) {
       return res.json({ ERROR: 'malumotni kiriting!' })
@@ -15,8 +14,8 @@ async function new_todo(req, res) {
     if (users[username]['user_id'] != user_id) {
       return res.json({ ERROR: 'kirish mumkin emas!!' })
     }
-    for (const t of users[username]['todo_list']) {
-      if (t['title'] == title) {
+    for (const t in users[username]['todo_list']) {
+      if (users[username]['todo_list'][t]['title'] == title) {
         return res.json({ ERROR: 'bu todo mavjud!' })
       }
     }

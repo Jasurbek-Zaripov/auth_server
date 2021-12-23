@@ -1,16 +1,1 @@
-{
-  "ANVARBEK": {
-    "password": "123456",
-    "gender": "male",
-    "birth": "2000-12-25",
-    "online": false,
-    "todo_list": [
-      {
-        "title": "anvar title",
-        "todo": "anavr todo",
-        "holat": "qizil",
-        "time": "21:30:27"
-      }
-    ]
-  }
-}
+{}

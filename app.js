@@ -165,7 +165,7 @@ app.post('/todo/new', async (req, res) => {
     })
 
     await dbModule.write_user_to_db(users)
-    return res.json({ message: "todo qo'shildi!" })
+    return res.json({ message: users[username]['todo_list'].length - 1 })
   } catch (xato) {
     return res.json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }

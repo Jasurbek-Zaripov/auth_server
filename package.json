@@ -8,7 +8,7 @@
     "restart": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jasurbek-Zaripov",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2"

@@ -1,11 +1,21 @@
 const dbModule = require('./src/module/db.module')
 const express = require('express')
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const HOST = 'localhost'
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+  let hder = JSON.stringify(req.headers['user-agent'])
+  if (/(mozilla\/)|(opera\/)/i.test(hder)) {
+    console.log('yes')
+    next()
+  } else {
+    return res.status(403).json({ Uzur: 'kirgiza olmayman!' })
+  }
+})
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, OPTIONS, PUT, PATCH, DELETE'
@@ -21,7 +31,9 @@ app.post('/user/new', async (req, res) => {
   try {
     let users = await dbModule.get_user_in_db()
     let { username, password, birth, gender } = req.body
-
+    if (!username || !password || !birth || !gender) {
+      return res.status(400).json({ ERROR: "malumotni to'ldiring!" })
+    }
     if (users[username]) {
       return res.status(400).json({ ERROR: "bu user ro'yxatda bor!" })
     }
@@ -120,7 +132,15 @@ app.put('/todo', async (req, res) => {
   try {
     let users = await dbModule.get_user_in_db()
     let { username, todoID, holat } = req.query
-
+    if (!username || !todoID || !holat) {
+      return res.status(400).json({ ERROR: "malumotni to'ldiring!" })
+    }
+    if (!users[username]) {
+      return res.status(404).json({ ERROR: 'user topilmadi' })
+    }
+    if (!users[username]['todo_list'][todoID]) {
+      return res.status(404).json({ ERROR: 'user bunday malumot mavjud emas!' })
+    }
     users[username]['todo_list'][todoID]['holat'] = holat
 
     await dbModule.write_user_to_db(users)
@@ -135,8 +155,14 @@ app.put('/todo', async (req, res) => {
 app.post('/todo/new', async (req, res) => {
   try {
     let { username, title, todo } = req.body
-    let users = await dbModule.get_user_in_db()
+    if (!username || !title || !todo) {
+      return res.status(400).json({ ERROR: 'malumotni kiriting!' })
+    }
 
+    let users = await dbModule.get_user_in_db()
+    if (!users[username]) {
+      return res.status(404).json({ ERROR: 'user topilmadi' })
+    }
     for (const t of users[username]['todo_list']) {
       if (t['title'] == title) {
         return res.status(400).json({ ERROR: 'bu todo mavjud!' })
@@ -158,6 +184,7 @@ app.post('/todo/new', async (req, res) => {
       .json({ ERROR: 'Qandaydir xato (bilish shart emas!)' })
   }
 })
-app.listen(3000, () =>
+
+app.listen(PORT, () =>
   console.log(`Backend server is running http://${HOST}:${PORT}`)
 )

@@ -1,41 +1,14 @@
 {
-  "Jasur": {
-    "password": 123456,
-    "gender": "male",
-    "birth": "200/09/26",
-    "online": true,
-    "todo_list": [
-      {
-        "title": "mashq",
-        "todo": "ertalabki mashq",
-        "holati": "qizil",
-        "time": "12:00"
-      },
-      {
-        "title": "mashq2",
-        "todo": "ertalabki mashq2",
-        "holati": "yashil",
-        "time": "17:00"
-      }
-    ]
-  },
-  "abdumalik": {
-    "password": "Qwertyfr20032@",
-    "gender": "male",
-    "birth": "2002/15/17",
-    "online": true,
-    "todo_list": []
-  },
   "ANVARBEK": {
     "password": "123456",
     "gender": "male",
-    "birth": "2000/12/25",
+    "birth": "2000-12-25",
     "online": false,
     "todo_list": [
       {
         "title": "anvar title",
         "todo": "anavr todo",
-        "holat": "DOING",
+        "holat": "qizil",
         "time": "21:30:27"
       }
     ]

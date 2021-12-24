@@ -9,9 +9,6 @@ async function get_todo(req, res) {
     if (!users[username]) {
       return res.json({ ERROR: 'user topilmadi!' })
     }
-    if (users[username]['user_id'] != user_id) {
-      return res.json({ ERROR: 'kirish mumkin emas!!' })
-    }
 
     res.json(users[username]['todo_list'])
   } catch (xato) {
